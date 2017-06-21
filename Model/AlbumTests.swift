@@ -11,23 +11,16 @@ class AlbumCodingTests: XCTestCase {
     }
     """
 
-    let album = Album(userId: 1, id: 1, title: "quidem molestiae enim")
+    let object = Album(userId: 1, id: 1, title: "quidem molestiae enim")
 
-    func testAlbumJsonDecoding() {
-        let decoder = JSONDecoder()
-        let data = json.data(using: .utf8)!
-        let result = try? decoder.decode(Album.self, from: data)
-        XCTAssertNotNil(result)
-        XCTAssertEqual(album, result!)
-    }
-    
-    func testAlbumJsonEncodeToDecode() {
-        let encoder = JSONEncoder()
-        let encoded = try! encoder.encode(album)
-        let decoder = JSONDecoder()
-        let decoded = try! decoder.decode(Album.self, from: encoded)
-        XCTAssertEqual(album, decoded)
+    func testDecodeAlbum() {
+        let item = Item(json: json, object: object)
+        testDecode(item: item)
     }
 
+    func testEncodeDecodeAlbum() {
+        let item = Item(json: json, object: object)
+        testEncodeDecode(item: item)
+    }
 }
 

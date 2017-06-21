@@ -8,7 +8,7 @@
 import XCTest
 @testable import PlaceholderKit
 
-class PhotoTests: XCTestCase {
+class PhotoCodingTests: XCTestCase {
 
     let json = """
         {
@@ -20,7 +20,7 @@ class PhotoTests: XCTestCase {
         }
     """
 
-    let photo = Photo(
+    let object = Photo(
         id: 1,
         albumId: 1,
         title: "accusamus beatae ad facilis cum similique qui sunt",
@@ -29,11 +29,13 @@ class PhotoTests: XCTestCase {
     )
 
     func testDecodePhoto() {
-        let decoder = JSONDecoder()
-        let data = json.data(using: .utf8)!
-        let result = try? decoder.decode(Photo.self, from: data)
-        XCTAssertNotNil(result)
-        XCTAssertEqual(photo, result!)
+        let item = Item(json: json, object: object)
+        testDecode(item: item)
+    }
+
+    func testEncodeDecodePhoto() {
+        let item = Item(json: json, object: object)
+        testEncodeDecode(item: item)
     }
 
 }

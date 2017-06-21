@@ -8,23 +8,7 @@
 import XCTest
 @testable import PlaceholderKit
 
-func testDecode<T>(json: String, object: T) where T: Codable & Equatable {
-    let decoder = JSONDecoder()
-    let data = json.data(using: .utf8)!
-    let result = try? decoder.decode(T.self, from: data)
-    XCTAssertNotNil(result)
-    XCTAssertEqual(object, result!)
-}
-
-func testEncodeDecode<T>(json: String, object: T) where T: Codable & Equatable {
-    let encoder = JSONEncoder()
-    let encoded = try! encoder.encode(object)
-    let decoder = JSONDecoder()
-    let decoded = try! decoder.decode(T.self, from: encoded)
-    XCTAssertEqual(object, decoded)
-}
-
-class TodoTests: XCTestCase {
+class TodoCodingTests: XCTestCase {
 
     let json = """
     {
@@ -35,7 +19,7 @@ class TodoTests: XCTestCase {
     }
     """
 
-    let todo = Todo(
+    let object = Todo(
         id: 1,
         userId: 1,
         title: "delectus aut autem",
@@ -43,12 +27,13 @@ class TodoTests: XCTestCase {
     )
 
     func testDecodeTodo() {
-        testDecode(json: json, object: todo)
+        let item = Item(json: json, object: object)
+        testDecode(item: item)
     }
 
     func testEncodeDecodeTodo() {
-        testEncodeDecode(json: json, object: todo)
+        let item = Item(json: json, object: object)
+        testEncodeDecode(item: item)
     }
-
 
 }

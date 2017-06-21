@@ -15,3 +15,9 @@ public struct Post: Codable {
     public let body: String 
 
 }
+
+extension Post: Equatable {
+    public static func ==(lhs: Post, rhs: Post) -> Bool {
+        return lhs.id == rhs.id && lhs.userId == rhs.userId && lhs.title == rhs.title
+    }
+}

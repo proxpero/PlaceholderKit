@@ -18,3 +18,9 @@ public struct Comment: Codable {
     public let body: String
     
 }
+
+extension Comment: Equatable {
+    public static func ==(lhs: Comment, rhs: Comment) -> Bool {
+        return lhs.id == rhs.id && lhs.postId == rhs.postId && lhs.name == rhs.name && lhs.email == rhs.email && lhs.body == rhs.body
+    }
+}
