@@ -6,7 +6,6 @@
 //
 
 import XCTest
-import Telephone
 @testable import PlaceholderKit
 
 class ModelRoutingTests: XCTestCase {
@@ -43,19 +42,23 @@ class ModelRoutingTests: XCTestCase {
 
 class UserRoutingTests: XCTestCase {
 
-    func testAllUsersResource() {
-
-        let route = Route(host: "example.com")
-        let allUsersResource = User.all(route: route)
-
-        let expectation = Telephone.Resource(url: URL(string: "example.com")!) { data in
-            return [User]()
-        }
-        XCTAssertEqual(allUsersResource.url, expectation.url)
-
-
+    func testAllUsersResourceURL() {
+        let route = Route(scheme: "file", host: "example.com")
+        let resource = User.all(route: route)
+        XCTAssertEqual(resource.url, URL(string: "file://example.com/users"))
     }
 
-
+    func testAllUsersResourceParse() {
+        let bundle = Bundle.init(for: UserRoutingTests.self)
+        let folder = String(bundle.bundleURL.absoluteString.characters.dropFirst(7))
+        let route = Route(scheme: "file", host: folder)
+        let url = Bundle.init(for: UserRoutingTests.self).url(forResource: "users", withExtension: nil)!
+        let allUsersResource = User.all(route: route)
+        XCTAssertEqual(allUsersResource.url, url)
+        let data = try! Data.init(contentsOf: allUsersResource.url)
+        let users = allUsersResource.parse(data)
+        XCTAssertNotNil(users)
+        XCTAssertEqual(users!.count, 10)
+    }
     
 }
